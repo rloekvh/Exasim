@@ -60,9 +60,9 @@ template <typename T> void cpuFlux(T *f, T *xdg, T *udg, T *odg, T *wdg, T *uinf
 		T t22 = t16+t21+1.0/2.0;
 		T t23 = 1.0/(t13*t13);
 		T t24 = udg2*udg2;
-		T t25 = t23*t24*(1.0/2.0);
+		T t25 = (t23*t24)/2.0;
 		T t26 = udg3*udg3;
-		T t27 = t23*t26*(1.0/2.0);
+		T t27 = (t23*t26)/2.0;
 		T t28 = t25+t27;
 		T t34 = t13*t28;
 		T t29 = -t34+udg4;

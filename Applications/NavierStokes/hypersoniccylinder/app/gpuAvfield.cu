@@ -97,9 +97,9 @@ template <typename T>  __global__  void kernelgpuAvfield(T *f, T *xdg, T *udg, T
 		T t50 = -t42+t49+1.0E4;
 		T t51 = 1.0/(t11*t11);
 		T t52 = udg2*udg2;
-		T t53 = t51*t52*(1.0/2.0);
+		T t53 = (t51*t52)/2.0;
 		T t54 = udg3*udg3;
-		T t55 = t51*t54*(1.0/2.0);
+		T t55 = (t51*t54)/2.0;
 		T t56 = t53+t55;
 		T t57 = param1-1.0;
 		T t58 = t50*t50;
