@@ -1,3 +1,4 @@
+%% params
 nt = length(pde.soltime);
 
 densities = zeros(nt,2);
@@ -10,6 +11,7 @@ eprevmax= 0; eprevmin = 1e8;
 rscale = 0.001;
 vscale = 5000;
 pscale = rscale * vscale^2;
+%% get ranges
 for ti = 1:nt
     Uout = getsolution(['dataout/out_t' num2str(pde.soltime(ti))],dmd,master.npe);
     rho = Uout(:,1,:);
@@ -38,10 +40,13 @@ for ti = 1:nt
     p = (gam-1)*rhoe;
     T = Minf^2 * gam * p(:)./rho(:) * Tref;
     rhot = rscale*rho(:); et = (rhoe(:)./rho(:))*vscale^2;
-    rhoet = rhoe(:)*pscale;
+    rhoet = rhoe(:)*pscale;    
+    disp(sum(rhot(:)<0.00085)./length(rhot(:)))
+
+    
     hold on
     subplot(1,2,2)
-    scatter(rhot(1:5:end),et(1:5:end),'.')
+    scatter(rhot(1:end),et(1:end),'.')
     hold on
     subplot(1,2,1)
      scatter(rhot(1:5:end),rhoet(1:5:end),'.')
