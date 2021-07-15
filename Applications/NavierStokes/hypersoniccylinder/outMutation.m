@@ -94,7 +94,7 @@
 
 mutationdata_out
 
-currdat = outhighres;
+currdat = outhighres3;
 
 rho = reshape(currdat(:,1),sqrt(size(currdat,1)),sqrt(size(currdat,1)));
 e = reshape(currdat(:,2),sqrt(size(currdat,1)),sqrt(size(currdat,1)));

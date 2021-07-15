@@ -9,7 +9,7 @@ L_rho = b_rho - a_rho;
 L_e = b_e - a_e;
 
 %% step 1: calculate < psi_a, psi_a > 
-porder = 22;
+porder = 12;
 n_alpha = (porder+1)^2;
 
 % get quadrature nodes
@@ -154,6 +154,7 @@ ylabel("e");
 
 
 %% check errors
+mutationdata_out;
 currdat = outhighres3;
 mutationdata_in; 
 rhotst = A(:,1); %A here is input for high res run
