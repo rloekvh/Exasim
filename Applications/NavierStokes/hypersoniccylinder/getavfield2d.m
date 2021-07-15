@@ -1,4 +1,4 @@
-function avField = getavfield2d(udg,qdg,vdg,param)
+function avField = getavfield2d(udg,qdg,vdg,wdg,param)
 
 gam = param(1);
 gam1 = gam - 1.0;

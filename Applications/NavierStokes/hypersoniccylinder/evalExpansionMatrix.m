@@ -5,18 +5,19 @@ function [F, Fxi, Feta] = evalExpansionMatrix(p,xi,eta,A1d,c_alpha)
     
     psirho_alpha = A1d*rhopows;
     psie_alpha = A1d*epows;
-    F = 0;
+%     F = 0;
     Fxi = 0;
     Feta = 0;
-    for ieta = 0:p
-        psie_curr = psie_alpha(ieta+1);
-%         psirho_curr = psirho_alpha(i+1);
-        for ixi = 0:p
-            psirho_curr = psirho_alpha(ixi+1);
-            disp(ixi+(p+1)*ieta+1)
-%             psie_curr = psie_alpha(j+1);
-            F = F + c_alpha(ixi+(p+1)*ieta+1)*psirho_curr*psie_curr;
-        end
-    end
+    F = dot(c_alpha,kron(psie_alpha, psirho_alpha));
+%     for ieta = 0:p
+%         psie_curr = psie_alpha(ieta+1);
+% %         psirho_curr = psirho_alpha(i+1);
+%         for ixi = 0:p
+%             psirho_curr = psirho_alpha(ixi+1);
+%             % disp(ixi+(p+1)*ieta+1)
+% %             psie_curr = psie_alpha(j+1);
+%             F = F + c_alpha(ixi+(p+1)*ieta+1)*psirho_curr*psie_curr;
+%         end
+%     end
 end
 

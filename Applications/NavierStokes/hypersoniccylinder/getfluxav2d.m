@@ -1,6 +1,30 @@
-function f = getfluxav2d(udg,qdg,vdg,param)
+function f = getfluxav2d(udg,qdg,vdg,wdg,param,eta)
 
-% pde.physicsparam = [gam Re Pr Minf rinf ruinf rvinf rEinf Tref avk avs];
+% pde.physicsparam = [gam Re Pr Minf rinf ruinf rvinf rEinf Tinf Tref Twall avb avk avs pde.porder sb0 sb1 rscale vscale pscale];
+%                      1  2  3   4    5     6     7      8    9   10    11   12  13  14     15     16  17   18     19      20     
+% not all physics params should be used
+% pde.externalparam = [porder_interp, A1d(:), T_alpha(:), P_alpha(:), mu_alpha(:), kappa_alpha(:), gamma_alpha(:), a_alpha(:), a_rho, b_rho, a_e, b_e];
+
+porder_interp = 12;
+nbasis = (porder_interp+1)^2; % num basis functions = (porder_interp+1)^2
+A1d = reshape(eta(2:(nbasis+1)), [porder_interp+1, porder_interp+1]);
+T_alpha = eta(nbasis+2:2*nbasis+1);
+% P_alpha = eta(2*nbasis+2:3*nbasis+1);
+% mu_alpha = eta(3*nbasis+2:4*nbasis+1);
+% kappa_alpha = eta(4*nbasis+2:5*nbasis+1);
+% gamma_alpha = eta(5*nbasis+2:6*nbasis+1);
+% a_alpha = eta(6*nbasis+2:7*nbasis+1);
+% a_rho = eta(7*nbasis+2);
+% b_rho = eta(7*nbasis+3);
+% a_e = eta(7*nbasis+4);
+% b_e = eta(7*nbasis+5);
+a_rho = 0.0005;
+b_rho = 0.2;
+a_e = 0.005;
+b_e = 0.5;
+
+
+rscale= param(18);
 
 gam = param(1);
 gam1 = gam - 1.0;
@@ -34,7 +58,14 @@ ry = qdg(5);
 ruy = qdg(6);
 rvy = qdg(7);
 rEy = qdg(8);
+% wdg = [p, mu, kappa, gamma, a, dT_dri, dT_d(re)];
 
+% T = wdg(1);
+% p = wdg(2);
+% mu
+% rpows = r.^((w0:21)');
+% A = rand(22*22,1);
+% A = reshape(A, [22 22]);
 % Regularization of rho (cannot be smaller than rmin)
 r = rmin + lmax(r-rmin,alpha);
 % Density sensor
@@ -72,9 +103,33 @@ py = py*dp;
 Ty = 1/gam1*(py*r - p*ry)*r1^2;
 % Adding Artificial viscosities
 T = p/(gam1*r);
+
+% NEED TO BRING INPUTS TO [0,1] DOMAIN!!!
+
+% xi = (r*rscale-a_rho)/(b_rho-a_rho);
+% eta = (E-a_e)/(b_e - a_e);
+% T = evalExpansionMatrix(porder_interp,xi,eta,A1d,T_alpha);
+% rhopows = (2*xi-1).^((porder_interp:-1:0)');
+% epows = (2*eta-1).^((porder_interp:-1:0)');
+%     
+% psirho_alpha = A1d*rhopows;
+% psie_alpha = A1d*epows;
+% F = 0;
+% for ieta = 0:porder_interp
+%     psie_curr = psie_alpha(ieta+1);
+% %         psirho_curr = psirho_alpha(i+1);
+%     for ixi = 0:porder_interp
+%         psirho_curr = psirho_alpha(ixi+1);
+%         % disp(ixi+(p+1)*ieta+1)
+% %             psie_curr = psie_alpha(j+1);
+%         F = F + T_alpha(ixi+(porder_interp+1)*ieta+1)*psirho_curr*psie_curr;
+%     end
+% end
+
 Tphys = Tref/Tinf * T;
 mu = getViscosity(muRef,Tref,Tphys,1);
 mu = mu + avs;
+% mu = T;
 fc = mu*gam/(Pr);
 % Viscous fluxes with artificial viscosities
 txx = (mu)*c23*(2*ux - vy) + (avb)*(ux+vy);
