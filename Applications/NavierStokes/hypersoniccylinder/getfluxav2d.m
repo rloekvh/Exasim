@@ -1,14 +1,14 @@
-function f = getfluxav2d(udg,qdg,vdg,wdg,param,eta)
+function f = getfluxav2d(udg,qdg,vdg,param,eta)
 
 % pde.physicsparam = [gam Re Pr Minf rinf ruinf rvinf rEinf Tinf Tref Twall avb avk avs pde.porder sb0 sb1 rscale vscale pscale];
 %                      1  2  3   4    5     6     7      8    9   10    11   12  13  14     15     16  17   18     19      20     
 % not all physics params should be used
 % pde.externalparam = [porder_interp, A1d(:), T_alpha(:), P_alpha(:), mu_alpha(:), kappa_alpha(:), gamma_alpha(:), a_alpha(:), a_rho, b_rho, a_e, b_e];
 
-porder_interp = 12;
-nbasis = (porder_interp+1)^2; % num basis functions = (porder_interp+1)^2
-A1d = reshape(eta(2:(nbasis+1)), [porder_interp+1, porder_interp+1]);
-T_alpha = eta(nbasis+2:2*nbasis+1);
+% porder_interp = 12;
+% nbasis = (porder_interp+1)^2; % num basis functions = (porder_interp+1)^2
+% A1d = reshape(eta(2:(nbasis+1)), [porder_interp+1, porder_interp+1]);
+% T_alpha = eta(nbasis+2:2*nbasis+1);
 % P_alpha = eta(2*nbasis+2:3*nbasis+1);
 % mu_alpha = eta(3*nbasis+2:4*nbasis+1);
 % kappa_alpha = eta(4*nbasis+2:5*nbasis+1);
@@ -18,13 +18,13 @@ T_alpha = eta(nbasis+2:2*nbasis+1);
 % b_rho = eta(7*nbasis+3);
 % a_e = eta(7*nbasis+4);
 % b_e = eta(7*nbasis+5);
-a_rho = 0.0005;
-b_rho = 0.2;
-a_e = 0.005;
-b_e = 0.5;
+% a_rho = 0.0005;
+% b_rho = 0.2;
+% a_e = 0.005;
+% b_e = 0.5;
 
 
-rscale= param(18);
+% rscale= param(18);
 
 gam = param(1);
 gam1 = gam - 1.0;

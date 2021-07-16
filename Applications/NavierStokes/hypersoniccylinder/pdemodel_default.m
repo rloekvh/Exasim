@@ -2,6 +2,7 @@ function pde = pdemodel_default
 pde.mass = @mass;
 pde.flux = @flux;
 pde.source = @source;
+pde.sourcew = @sourcew;
 pde.fbou = @fbou;
 pde.ubou = @ubou;
 pde.initu = @initu;
@@ -123,67 +124,3 @@ function u0 = initu(x, mu, eta)
     u0 = sym(mu(5:8)); % freestream flow   
 end
 
-function w0 = initw(x, mu, eta)
-    w0 = sourcew(sym(mu(5:8)), [],[],x,0,mu,eta);
-end
-
-function sw = sourcew(u, q, w, v, x, t, mu, eta)
-    sw = fluidmodel(u, t, mu, eta,0);
-end
-
-
-function fluxquantities = fluidmodel(u,t,mu,eta,modelflag)
-    % Returns nondimensional quantities needed for flux and eventually source terms
-    % fluxquantities: given conservative variables, return thermo and
-    % transport quantities
-    
-%     modelFlag 0 = ideal gas
-%               1 = calorically imperfect gas
-%     wdg = [p, mu, kappa, gamma, a, dT_dri, dT_d(re)];
-    if modelFlag == 0
-%         fluxquantities = zeros(1,7);
-        Re = param(2);
-        Pr = param(3);
-        Minf = param(4);
-        Tref = param(10);
-        % should Tinf be from here?
-        
-        r  = u(1);
-        ru = u(2);
-        rv = u(3);
-        rE = u(4);
-    
-        rinv = 1/r;
-        u = ru*rinv;
-        v = rv*rinv;
-        E = rE*rinv;
-        
-        gamma = 1.4;
-        gammaminus1 = gamma-1;
-        Ekinetic = 0.5*r*(u*u + v*v);
-        
-        % Ideal gas pressure
-        p = gammaminus1 * (rE - Ekinetic);
-        
-        % Sutherland's law for viscosity
-        muRef = 1/Re;
-        Tinf = 1/(gam*gam1*Minf^2);
-        T = p/(gam1*r);
-        Tphys = Tref/Tinf * T;
-        mu = getViscosity(muRef,Tref,Tphys,1);
-        
-        % Prandtl number for conductivity
-        kappa = mu*gam/(Pr);
-        
-        % speed of sound
-        a = sqrt(gam*p*r1);
-        
-        
-        
-        
-        fluxquantities = [p, mu, kappa, gamma, a, dT_dri, dT_dre];
-    else
-        error("Model not implemented");
-    end
-
-end

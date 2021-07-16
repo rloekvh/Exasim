@@ -59,7 +59,7 @@ E = rE*r1;
 q = 0.5*(uv*uv+vv*vv);
 % p = gam1*(rE-r*q);
 % Regularization of pressure p (cannot be smaller than pmin)
-p = pmin + lmax(p-pmin,alpha);
+% p = pmin + lmax(p-pmin,alpha); % move to wdg
 % Pressure sensor
 dp = atan(alpha*(p - pmin))/pi + (alpha*(p - pmin))/(pi*(alpha^2*(p - pmin)^2 + 1)) + 1/2;
 %dp=1;
@@ -78,9 +78,9 @@ uy = (ruy - dr_dy*uv)*r1;
 vy = (rvy - dr_dy*vv)*r1;
 dq_dy = uv*uy + vv*vy;
 
-% re = rE - r q/2
-dre_dr = -q/2;
-dre_dq = -r/2;
+% re = rE - r q
+dre_dr = -q;
+dre_dq = -r;
 dre_drE = 1;
 dre_dx = dre_dr * dr_dx + dre_dq * dq_dx + dre_drE * drE_dx;
 dre_dy = dre_dr * dr_dy + dre_dq * dq_dy + dre_drE * drE_dy;
